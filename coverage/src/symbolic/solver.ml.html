@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <title>solver.ml &mdash; Coverage report</title>
-    <meta name="description" content="43.75% coverage in src/symbolic/solver.ml">
+    <meta name="description" content="55.00% coverage in src/symbolic/solver.ml">
     <link rel="stylesheet" href="../../coverage.css"/>
     <script src="../../highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -15,16 +15,16 @@
           <span class="dirname">src/symbolic/</span>solver.ml
         </a>
       </h1>
-      <h2>43.75%</h2>
+      <h2>55.00%</h2>
     </div>
     <div id="navbar">
-      <span class="unvisited" style="bottom:28.95%"></span>
-      <span class="unvisited" style="bottom:23.68%"></span>
-      <span class="unvisited" style="bottom:21.05%"></span>
-      <span class="unvisited" style="bottom:18.42%"></span>
-      <span class="unvisited" style="bottom:15.79%"></span>
-      <span class="unvisited" style="bottom:10.53%"></span>
-      <span class="unvisited" style="bottom:7.89%"></span>
+      <span class="unvisited" style="top:50.00%"></span>
+      <span class="unvisited" style="bottom:46.30%"></span>
+      <span class="unvisited" style="bottom:44.44%"></span>
+      <span class="unvisited" style="bottom:42.59%"></span>
+      <span class="unvisited" style="bottom:40.74%"></span>
+      <span class="unvisited" style="bottom:37.04%"></span>
+      <span class="unvisited" style="bottom:35.19%"></span>
     </div>
     <div id="report">
       <div id="lines-layer">
@@ -67,6 +67,22 @@
 <a id="L36"></a><span class="visited"> </span>
 <a id="L37"></a><span > </span>
 <a id="L38"></a><span > </span>
+<a id="L39"></a><span > </span>
+<a id="L40"></a><span > </span>
+<a id="L41"></a><span > </span>
+<a id="L42"></a><span > </span>
+<a id="L43"></a><span > </span>
+<a id="L44"></a><span > </span>
+<a id="L45"></a><span class="visited"> </span>
+<a id="L46"></a><span class="visited"> </span>
+<a id="L47"></a><span > </span>
+<a id="L48"></a><span class="visited"> </span>
+<a id="L49"></a><span > </span>
+<a id="L50"></a><span > </span>
+<a id="L51"></a><span > </span>
+<a id="L52"></a><span > </span>
+<a id="L53"></a><span > </span>
+<a id="L54"></a><span class="visited"> </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -109,6 +125,22 @@
 <a href="#L36">36</a>
 <a href="#L37">37</a>
 <a href="#L38">38</a>
+<a href="#L39">39</a>
+<a href="#L40">40</a>
+<a href="#L41">41</a>
+<a href="#L42">42</a>
+<a href="#L43">43</a>
+<a href="#L44">44</a>
+<a href="#L45">45</a>
+<a href="#L46">46</a>
+<a href="#L47">47</a>
+<a href="#L48">48</a>
+<a href="#L49">49</a>
+<a href="#L50">50</a>
+<a href="#L51">51</a>
+<a href="#L52">52</a>
+<a href="#L53">53</a>
+<a href="#L54">54</a>
 </pre>
 <pre><code class="ocaml">(* SPDX-License-Identifier: AGPL-3.0-or-later *)
 (* Copyright © 2021-2024 OCamlPro *)
@@ -119,35 +151,51 @@ type 'a solver_module = (module Smtml.Solver_intf.S with type t = 'a)
 type t = S : ('a solver_module * 'a) -&gt; t [@@unboxed]
 
 let fresh solver () =
-  <span data-count="953">l</span>et module Mapping = (val Smtml.Solver_dispatcher.mappings_of_solve<span data-count="953">r</span> solver)
+  <span data-count="774">l</span>et module Mapping = (val Smtml.Solver_dispatcher.mappings_of_solve<span data-count="774">r</span> solver)
   in
   let module Mapping = Mapping.Fresh.Make () in
   let module Batch = Smtml.Solver.Cached (Mapping) in
   let solver = Batch.create ~logic:QF_BVFP () in
-  <span data-count="947">S</span> ((module Batch), solver)
+  <span data-count="767">S</span> ((module Batch), solver)
 
 let check (S (solver_module, s)) pc =
-  <span data-count="28644">l</span>et module Solver = (val solver_module) in
+  <span data-count="27672">l</span>et module Solver = (val solver_module) in
   Solver.check_set s pc
 
 let model (S (solver_module, s)) ~symbol_scopes ~pc =
-  <span data-count="1503">l</span>et module Solver = (val solver_module) in
+  <span data-count="1067">l</span>et module Solver = (val solver_module) in
   let symbols = Symbol_scope.only_symbols symbol_scopes in
-  <span data-count="1503">l</span>et model =
+  <span data-count="1066">l</span>et model =
     match Solver.get_sat_model ~symbols s pc with
     | `Unknown -&gt; assert false
     | <span data-count="0">`</span>Unsat -&gt;
       (* Should not happen because we checked just before that is must be true. *)
-      Logs.err (fun m -&gt; <span data-count="0">m</span> "something is wrong... I can not get a model");
-      <span data-count="0">L</span>ogs.err (fun m -&gt;
+      Log.err (fun m -&gt; <span data-count="0">m</span> "something is wrong... I can not get a model");
+      <span data-count="0">L</span>og.err (fun m -&gt;
         <span data-count="0">m</span> "symbols: %a"
           (Fmt.lis<span data-count="0">t</span> ~sep:(fun fmt () -&gt; <span data-count="0">F</span>mt.pf fmt ", ") Smtml.Symbol.pp)
           symbols );
-      <span data-count="0">L</span>ogs.err (fun m -&gt; <span data-count="0">m</span> "pc:@\n  @[&lt;v&gt;%a@]" Smtml.Expr.Set.pp pc);
+      <span data-count="0">L</span>og.err (fun m -&gt; <span data-count="0">m</span> "pc:@\n  @[&lt;v&gt;%a@]" Smtml.Expr.Set.pp pc);
       <span data-count="0">a</span>ssert false
-    | <span data-count="1502">`</span>Model model -&gt; model
+    | <span data-count="1066">`</span>Model model -&gt; model
   in
   model
+
+let empty_stats = Smtml.Statistics.Map.empty
+
+let stats_are_empty = Smtml.Statistics.Map.is_empty
+
+let get_stats (S (solver_module, s)) =
+  <span data-count="240">i</span>f Log.is_bench_enabled () then
+    <span data-count="2">l</span>et module Solver = (val solver_module) in
+    Solver.get_statistics s
+  else <span data-count="238">e</span>mpty_stats
+
+let merge_stats = Smtml.Statistics.merge
+
+let pp_stats = Smtml.Statistics.pp
+
+let fold_stats f (s : Smtml.Statistics.t) = <span data-count="2">S</span>mtml.Statistics.Map.fold f s
 </code></pre>
       </div>
     </div>

@@ -126,6 +126,20 @@
 <a id="L102"></a><span > </span>
 <a id="L103"></a><span > </span>
 <a id="L104"></a><span > </span>
+<a id="L105"></a><span > </span>
+<a id="L106"></a><span > </span>
+<a id="L107"></a><span > </span>
+<a id="L108"></a><span > </span>
+<a id="L109"></a><span > </span>
+<a id="L110"></a><span > </span>
+<a id="L111"></a><span > </span>
+<a id="L112"></a><span > </span>
+<a id="L113"></a><span > </span>
+<a id="L114"></a><span > </span>
+<a id="L115"></a><span > </span>
+<a id="L116"></a><span > </span>
+<a id="L117"></a><span > </span>
+<a id="L118"></a><span > </span>
 </pre>
       </div>
       <div id="text-layer">
@@ -234,6 +248,20 @@
 <a href="#L102">102</a>
 <a href="#L103">103</a>
 <a href="#L104">104</a>
+<a href="#L105">105</a>
+<a href="#L106">106</a>
+<a href="#L107">107</a>
+<a href="#L108">108</a>
+<a href="#L109">109</a>
+<a href="#L110">110</a>
+<a href="#L111">111</a>
+<a href="#L112">112</a>
+<a href="#L113">113</a>
+<a href="#L114">114</a>
+<a href="#L115">115</a>
+<a href="#L116">116</a>
+<a href="#L117">117</a>
+<a href="#L118">118</a>
 </pre>
 <pre><code class="ocaml">(* SPDX-License-Identifier: AGPL-3.0-or-later *)
 (* Copyright © 2021-2024 OCamlPro *)
@@ -247,15 +275,29 @@ type 'a eval =
       * (int * string) list
       * int list
       * Symbol_scope.t
+      * Smtml.Statistics.t
   | EAssert of
       Smtml.Expr.t
       * Smtml.Model.t
       * (int * string) list
       * int list
       * Symbol_scope.t
+      * Smtml.Statistics.t
 
 module type S = sig
-  module V : Func_intf.Value_types
+  module V : sig
+    type bool
+
+    type int32
+
+    type int64
+
+    type float32
+
+    type float64
+
+    type v128
+  end
 
   type thread
 
@@ -275,7 +317,7 @@ module type S = sig
 
   val trap : Result.err -&gt; 'a t
 
-  val select : V.bool -&gt; Bool.t t
+  val select : V.bool -&gt; prio_true:Prio.t -&gt; prio_false:Prio.t -&gt; Bool.t t
 
   val select_i32 : V.int32 -&gt; Int32.t t
 
