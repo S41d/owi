@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8"/>
     <title>compile.ml &mdash; Coverage report</title>
-    <meta name="description" content="82.14% coverage in src/compile/compile.ml">
+    <meta name="description" content="85.71% coverage in src/compile/compile.ml">
     <link rel="stylesheet" href="../../coverage.css"/>
     <script src="../../highlight.pack.js"></script>
     <script>hljs.initHighlightingOnLoad();</script>
@@ -15,11 +15,9 @@
           <span class="dirname">src/compile/</span>compile.ml
         </a>
       </h1>
-      <h2>82.14%</h2>
+      <h2>85.71%</h2>
     </div>
     <div id="navbar">
-      <span class="some-visited" style="top:10.47%"></span>
-      <span class="some-visited" style="top:30.23%"></span>
       <span class="unvisited" style="bottom:41.86%"></span>
       <span class="unvisited" style="bottom:40.70%"></span>
       <span class="unvisited" style="bottom:39.53%"></span>
@@ -40,7 +38,7 @@
 <a id="L6"></a><span > </span>
 <a id="L7"></a><span > </span>
 <a id="L8"></a><span > </span>
-<a id="L9"></a><span class="some-visited"> </span>
+<a id="L9"></a><span class="visited"> </span>
 <a id="L10"></a><span > </span>
 <a id="L11"></a><span > </span>
 <a id="L12"></a><span class="visited"> </span>
@@ -49,15 +47,15 @@
 <a id="L15"></a><span > </span>
 <a id="L16"></a><span class="visited"> </span>
 <a id="L17"></a><span class="visited"> </span>
-<a id="L18"></a><span > </span>
+<a id="L18"></a><span class="visited"> </span>
 <a id="L19"></a><span > </span>
-<a id="L20"></a><span class="visited"> </span>
+<a id="L20"></a><span > </span>
 <a id="L21"></a><span class="visited"> </span>
 <a id="L22"></a><span class="visited"> </span>
 <a id="L23"></a><span > </span>
 <a id="L24"></a><span > </span>
 <a id="L25"></a><span class="visited"> </span>
-<a id="L26"></a><span class="some-visited"> </span>
+<a id="L26"></a><span class="visited"> </span>
 <a id="L27"></a><span > </span>
 <a id="L28"></a><span class="visited"> </span>
 <a id="L29"></a><span class="visited"> </span>
@@ -217,43 +215,43 @@ open Syntax
 
 module Text = struct
   let until_text_validate ~unsafe m =
-    <span data-count="3689">i</span>f unsafe then <span data-count="0">O</span>k m else <span data-count="3689">T</span>ext_validate.modul m
+    <span data-count="3859">i</span>f unsafe then <span data-count="1">O</span>k m else <span data-count="3858">T</span>ext_validate.modul m
 
   let until_group ~unsafe m =
-    <span data-count="3689">l</span>et+ m = until_text_validat<span data-count="3689">e</span> ~unsafe m in
-    <span data-count="3655">G</span>rouped.of_text m
+    <span data-count="3859">l</span>et+ m = until_text_validat<span data-count="3859">e</span> ~unsafe m in
+    <span data-count="3814">G</span>rouped.of_text m
 
   let until_assign ~unsafe m =
-    <span data-count="3689">l</span>et* m = until_grou<span data-count="3689">p</span> ~unsafe m in
-    <span data-count="3655">A</span>ssigned.of_grouped m
+    <span data-count="3859">l</span>et* m = until_grou<span data-count="3859">p</span> ~unsafe m in
+    <span data-count="3814">l</span>et+ assigned = Assigned.of_groupe<span data-count="3814">d</span> m in
+    <span data-count="3786">(</span>m, assigned)
 
   let until_binary ~unsafe m =
-    <span data-count="3689">l</span>et* m = until_assig<span data-count="3689">n</span> ~unsafe m in
-    <span data-count="3627">l</span>et* m = Rewrite.modu<span data-count="3627">l</span> m in
-    <span data-count="3595">O</span>k m
+    <span data-count="3859">l</span>et* m, assigned = until_assig<span data-count="3859">n</span> ~unsafe m in
+    <span data-count="3786">R</span>ewrite.modul m assigned
 
   let until_validate ~unsafe m =
-    <span data-count="3611">l</span>et* m = until_binar<span data-count="3611">y</span> ~unsafe m in
-    <span data-count="3581">i</span>f unsafe then <span data-count="0">O</span>k m
+    <span data-count="3738">l</span>et* m = until_binar<span data-count="3738">y</span> ~unsafe m in
+    <span data-count="3684">i</span>f unsafe then <span data-count="1">O</span>k m
     else
-      <span data-count="3581">l</span>et+ () = Binary_validate.modu<span data-count="3581">l</span> m in
-      <span data-count="2054">m</span>
+      <span data-count="3683">l</span>et+ () = Binary_validate.modu<span data-count="3683">l</span> m in
+      <span data-count="2234">m</span>
 
   let until_link ~unsafe ~name link_state m =
-    <span data-count="3397">l</span>et* m = until_validat<span data-count="3397">e</span> ~unsafe m in
-    <span data-count="1844">L</span>ink.Binary.modul link_state ~name m
+    <span data-count="3508">l</span>et* m = until_validat<span data-count="3508">e</span> ~unsafe m in
+    <span data-count="2013">L</span>ink.Binary.modul link_state ~name m
 end
 
 module Binary = struct
   let until_validate ~unsafe m =
-    <span data-count="690">i</span>f unsafe then <span data-count="397">O</span>k m
+    <span data-count="740">i</span>f unsafe then <span data-count="408">O</span>k m
     else
-      <span data-count="293">l</span>et+ () = Binary_validate.modu<span data-count="293">l</span> m in
-      <span data-count="293">m</span>
+      <span data-count="332">l</span>et+ () = Binary_validate.modu<span data-count="332">l</span> m in
+      <span data-count="332">m</span>
 
   let until_link ~unsafe ~name link_state m =
-    <span data-count="473">l</span>et* m = until_validat<span data-count="473">e</span> ~unsafe m in
-    <span data-count="473">L</span>ink.Binary.modul link_state ~name m
+    <span data-count="524">l</span>et* m = until_validat<span data-count="524">e</span> ~unsafe m in
+    <span data-count="524">L</span>ink.Binary.modul link_state ~name m
 end
 
 module Any = struct
@@ -281,11 +279,11 @@ module File = struct
     | Wast _ | Extern _ -&gt; assert false
 
   let until_validate ~unsafe filename =
-    <span data-count="419">l</span>et* m = Parse.guess_from_fil<span data-count="419">e</span> filename in
-    <span data-count="418">L</span>og.bench_fn "validation time" @@ fun () -&gt;
-    <span data-count="418">m</span>atch m with
-    | <span data-count="201">K</span>ind.Wat m -&gt; Text.until_validate ~unsafe m
-    | <span data-count="217">W</span>asm m -&gt; Binary.until_validate ~unsafe m
+    <span data-count="430">l</span>et* m = Parse.guess_from_fil<span data-count="430">e</span> filename in
+    <span data-count="429">L</span>og.bench_fn "validation time" @@ fun () -&gt;
+    <span data-count="429">m</span>atch m with
+    | <span data-count="213">K</span>ind.Wat m -&gt; Text.until_validate ~unsafe m
+    | <span data-count="216">W</span>asm m -&gt; Binary.until_validate ~unsafe m
     | Wast _ | Extern _ -&gt; assert false
 
   let until_link ~unsafe ~name link_state filename =
