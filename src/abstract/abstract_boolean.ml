@@ -19,3 +19,8 @@ let not ctx b = Abstract_domain.Boolean_Forward.not ctx b
 let or_ ctx b1 b2 = Abstract_domain.Boolean_Forward.( || ) ctx b1 b2
 
 let and_ ctx b1 b2 = Abstract_domain.Boolean_Forward.( && ) ctx b1 b2
+
+let eq ctx b1 b2 =
+  let both_true = and_ ctx b1 b2 in
+  let both_false = and_ ctx (not ctx b1) (not ctx b2) in
+  or_ ctx both_true both_false

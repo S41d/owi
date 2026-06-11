@@ -72,9 +72,4 @@ val equal : t -> t -> bool
 
 val size_of : t -> Units.In_bits.t
 
-val to_boolean : Abstract_domain.Context.t -> t -> Abstract_boolean.t
-
 val top : Units.In_bits.t -> Abstract_domain.Context.t -> t
-
-val of_boolean :
-  Abstract_domain.Context.t -> Units.In_bits.t -> Abstract_boolean.t -> t

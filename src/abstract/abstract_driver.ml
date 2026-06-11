@@ -291,12 +291,19 @@ module DenotFixpoint (S : DATA_STATE) = struct
         (Some state, jt) )
     | If_else (_, bt, expr_then, expr_else) ->
       let b, stack = Stack.pop_bool stack ctx in
+      let to_drop =
+        match bt with
+        | Some (Bt_raw (_i, (params, _res))) -> List.length params
+        | None -> 0
+      in
       let state_then, jt_true =
         match Abstract_domain.assume ctx b with
         | Some ctx ->
           eval_instr { state with stack; ctx }
             (Annotated.dummy (Binary.Block (None, bt, expr_then)))
-        | None -> (None, JumpTarget.empty)
+        | None ->
+          let stack = Stack.drop_n state.stack to_drop in
+          (Some { state with stack }, JumpTarget.empty)
       in
       let state_else, jt_false =
         let not_cond = Abstract_boolean.not ctx b in
@@ -304,16 +311,15 @@ module DenotFixpoint (S : DATA_STATE) = struct
         | Some ctx ->
           eval_instr { state with stack; ctx }
             (Annotated.dummy (Binary.Block (None, bt, expr_else)))
-        | None -> (None, JumpTarget.empty)
+        | None ->
+          let stack = Stack.drop_n state.stack to_drop in
+          (Some { state with stack }, JumpTarget.empty)
       in
       let jt = JumpTarget.append jt_true jt_false in
       begin match (state_then, state_else) with
       | Some state_true, Some state_false ->
         (Some (join state_true state_false), jt)
-      | Some state, None | None, Some state -> (Some state, jt)
-      | None, None ->
-        (* TODO should this be assert false ? *)
-        (None, jt)
+      | (Some _ | None), (Some _ | None) -> assert false
       end
     | Loop (_str_opt, bt, body) ->
       let widening_id = Domains.Sig.Widening_Id.fresh () in
@@ -321,14 +327,14 @@ module DenotFixpoint (S : DATA_STATE) = struct
       let initial_state =
         { state with ctx = Abstract_domain.Context.copy ctx }
       in
-      let to_take =
+      let to_keep =
         match bt with
         | Some (Bt_raw (_i, (params, _res))) -> List.length params
         | None -> 0
       in
       let rec fixpoint state =
         let next_state, jt = eval_expr state body in
-        let shorten_stack stack = Stack.keep stack to_take in
+        let shorten_stack stack = Stack.keep stack to_keep in
         let next_head =
           let handle_jts jts =
             let fp_stack = shorten_stack initial_state.stack in
@@ -506,6 +512,9 @@ module DataAbstract_state : DATA_STATE = struct
       { state with stack }
     | Eqz ->
       let stack = Stack.apply_i32_boolean stack ctx (Abstract_i32.eqz ctx) in
+      { state with stack }
+    | Eq ->
+      let stack = Stack.apply_i32_i32_boolean stack ctx (Abstract_i32.eq ctx) in
       { state with stack }
     | _ ->
       Fmt.epr "not implemented yet";

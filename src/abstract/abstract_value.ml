@@ -66,19 +66,6 @@ let of_binary size x =
   | 64 -> I64 (I64.of_binary x)
   | _ -> assert false
 
-let of_boolean ctx size boolean =
-  let true_ = Abstract_boolean.true_ ctx in
-  let n = if Abstract_boolean.equal boolean true_ then 1 else 0 in
-  match Units.In_bits.to_int size with
-  | 32 -> I32 (Abstract_i32.of_int ctx n)
-  | 64 -> I64 (Abstract_i64.of_int ctx n)
-  | _ -> assert false
-
 let size_of = function I32 _ -> Size.b32 | I64 _ -> Size.b64 | _ -> .
-
-let to_boolean ctx x =
-  let size = Size.b32 in
-  let zero = Abstract_domain.Binary_Forward.biconst ~size Z.zero ctx in
-  Abstract_domain.Binary_Forward.beq ~size ctx (to_binary x) zero
 
 let top size ctx = of_binary size @@ Abstract_domain.binary_empty ~size ctx

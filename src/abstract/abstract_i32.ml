@@ -12,11 +12,6 @@ let of_binary x = x
 
 let to_binary x = x
 
-let of_boolean ctx boolean =
-  let true_ = Abstract_boolean.true_ ctx in
-  let n = if Abstract_boolean.equal boolean true_ then 1 else 0 in
-  Abstract_domain.Binary_Forward.biconst ~size (Z.of_int n) ctx
-
 let to_boolean ctx x =
   let zero = Abstract_domain.Binary_Forward.biconst ~size Z.zero ctx in
   let b = Abstract_domain.Binary_Forward.beq ~size ctx x zero in
@@ -79,3 +74,18 @@ let lt_u ctx x1 x2 =
   let le = le_u ctx x1 x2 in
   let neq = Abstract_boolean.not ctx (eq ctx x1 x2) in
   Abstract_boolean.and_ ctx le neq
+
+let of_boolean ctx boolean =
+  let bool_lattice = Abstract_domain.query_boolean ctx boolean in
+  let truthy, falsy = Codex.Lattices.Quadrivalent.to_bools bool_lattice in
+  match (truthy, falsy) with
+  | false, true -> (ctx, of_int ctx 0)
+  | true, false -> (ctx, of_int ctx 1)
+  | false, false -> assert false
+  | true, true -> (
+    let i = unknown ctx in
+    let ge0 = Abstract_boolean.not ctx (lt_s ctx i (zero ctx)) in
+    let le1 = le_s ctx i (of_int ctx 1) in
+    match Abstract_domain.assume ctx (Abstract_boolean.and_ ctx ge0 le1) with
+    | Some ctx -> (ctx, i)
+    | None -> assert false )

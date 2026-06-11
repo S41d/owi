@@ -19,3 +19,5 @@ val and_ : Abstract_domain.Context.t -> t -> t -> t
 val pp : t Fmt.t
 
 val equal : t -> t -> bool
+
+val eq : Abstract_domain.Context.t -> t -> t -> t
