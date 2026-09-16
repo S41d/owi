@@ -188,18 +188,9 @@ $ owi wasm script abstract --no-exhaustion reference/func_ptrs.wast
 $ owi wasm script abstract --no-exhaustion reference/labels.wast
 $ owi wasm script abstract --no-exhaustion reference/left-to-right.wast
   $ owi wasm script abstract --no-exhaustion reference/linking.wast
-  owi: internal error, uncaught exception:
-       File "src/script/script_abstract.ml", line 34, characters 4-10: Assertion failed
-       Raised at Owi__Script_abstract.do_action in file "src/script/script_abstract.ml", line 34, characters 4-16
-       Called from Stdlib__Result.map in file "result.ml", line 27, characters 32-37
-       Called from Owi__Script_abstract.run_one in file "src/script/script_abstract.ml", line 134, characters 17-37
-       Called from Stdlib__List.fold_left in file "list.ml", line 125, characters 24-34
-       Called from Owi__Script_abstract.exec in file "src/script/script_abstract.ml", line 199, characters 12-37
-       Called from Owi__Syntax.list_iter.aux in file "src/infra/syntax.ml", line 11, characters 25-28
-       Called from Owi__Cmd_wasm_script.cmd_abstract in file "src/cmd/cmd_wasm_script.ml", line 22, characters 15-46
-       Called from Cmdliner_term.app.(fun) in file "cmdliner_term.ml", line 22, characters 19-24
-       Called from Cmdliner_eval.run_parser in file "cmdliner_eval.ml", line 41, characters 7-16
-  [125]
+  owi: [ERROR] got:      [i32 {142}] expected: (i32.const 241)
+  owi: [ERROR] bad result
+  [3]
   $ owi wasm script abstract --no-exhaustion reference/local_get.wast
   $ owi wasm script abstract --no-exhaustion reference/local_set.wast
   $ owi wasm script abstract --no-exhaustion reference/local_tee.wast

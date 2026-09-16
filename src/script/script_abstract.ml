@@ -14,7 +14,7 @@ let ty : host_externref Type.Id.t = Type.Id.make ()
 let do_action env = function
   | Wast.Invoke (module_name, func_name, args) -> begin
     Log.info (fun m ->
-      m "invoke %a %s %a..."
+      m "invoke %a.%s %a"
         (Fmt.option ~none:Fmt.nop Fmt.string)
         module_name func_name Wast.pp_consts args );
     let* f = Env.Abstract.get_exported_func ~env ~module_name ~func_name in
@@ -27,11 +27,12 @@ let do_action env = function
     end
   | Get (module_name, global_name) ->
     Log.info (fun m -> m "get...");
-    let+ _global =
+    let+ global =
       Env.Abstract.get_exported_global ~env ~module_name ~global_name
     in
-    (* (env, [ global ]) *)
-    assert false
+    let stack = [ global ] in
+    let ctx = Env.Abstract.get_context ~env in
+    Abstract_state.empty_exec_state ~ctx ~stack
 
 let run_one ~no_exhaustion:_ (state : Env.Abstract.t Result.t) cmd =
   let* env = state in
@@ -118,9 +119,7 @@ let run_one ~no_exhaustion:_ (state : Env.Abstract.t Result.t) cmd =
     env
   | Assert (Assert_unlinkable (modul, expected)) ->
     Log.info (fun m -> m "*** assert_unlinkable");
-    let got =
-      Compile.Text.until_abstract_link env ~unsafe ~name:None modul
-    in
+    let got = Compile.Text.until_abstract_link env ~unsafe ~name:None modul in
     let+ () = Script_error.check_result ~expected ~got in
     env
   | Assert (Assert_malformed (modul, expected)) ->
