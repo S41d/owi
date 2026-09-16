@@ -116,6 +116,13 @@ let run_one ~no_exhaustion:_ (state : Env.Abstract.t Result.t) cmd =
       | _ -> assert false
     in
     env
+  | Assert (Assert_unlinkable (modul, expected)) ->
+    Log.info (fun m -> m "*** assert_unlinkable");
+    let got =
+      Compile.Text.until_abstract_link env ~unsafe ~name:None modul
+    in
+    let+ () = Script_error.check_result ~expected ~got in
+    env
   | Assert (Assert_malformed (modul, expected)) ->
     Log.info (fun m -> m "*** assert_malformed");
     let got = Compile.Text.until_abstract_link ~unsafe ~name:None env modul in
