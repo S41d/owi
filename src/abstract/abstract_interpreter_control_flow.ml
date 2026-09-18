@@ -7,7 +7,7 @@ module JumpMap = Abstract_jump_map
 module Value = Abstract_value
 module Trace = Abstract_trace
 
-let max_recursive_calls = 10
+let max_recursive_calls = 100
 
 exception RecursiveFunctionCall
 
@@ -298,7 +298,8 @@ module DenotFixpoint (S : module type of Abstract_interpreter_simple) = struct
       | Num_type I64 -> I64 (Abstract_i64.zero abs_state.ctx)
       | Num_type F32 -> F32 (Abstract_f32.unknown abs_state.ctx)
       | Num_type F64 -> F64 (Abstract_f64.unknown abs_state.ctx)
-      | _ -> assert false
+      | Num_type V128 -> V128 (Abstract_v128.unknown abs_state.ctx)
+      | Ref_type _ -> assert false
     in
 
     let locals =

@@ -2,14 +2,17 @@
 (* Copyright © 2021-2026 OCamlPro *)
 (* Written by the Owi programmers *)
 
-type t = |
+type t =
+  { content : string
+  ; dropped : bool
+  }
 
-let of_string _ = assert false
+let value { content; dropped } = if dropped then "" else content
 
-let size _ = assert false
+let size { content; _ } = String.length content
 
-let drop _ = assert false
+let drop { content; _ } = { content; dropped = true }
 
-let to_string _ = assert false
+let of_string str = { content = str; dropped = false }
 
-let value _ = assert false
+let to_string { content; dropped } = if dropped then None else Some content
